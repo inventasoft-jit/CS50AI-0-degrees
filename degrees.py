@@ -133,7 +133,7 @@ def shortest_path(source, target):
                 node = node.parent
             actors.reverse()
             movies.reverse()
-            pairs = list(zip(actors,movies))
+            pairs = list(zip(actors, movies))
             return pairs
 
         # Mark node as explored
@@ -144,6 +144,7 @@ def shortest_path(source, target):
             if not frontier.contains_state(state) and state not in explored:
                 child = Node(state=state, parent=node, action=action)
                 frontier.add(child)
+
 
 def person_id_for_name(name):
     """
