@@ -92,9 +92,58 @@ def shortest_path(source, target):
     If no possible path, returns None.
     """
 
-    # TODO
-    raise NotImplementedError
+    # source person id
+    # target person id
+    # action: list of (movie_id, person_id) pairs of neighbours
+    # state: person id of the current person
 
+    # Keep track of number of states explored
+    num_explored = 0
+
+    # Node.state = person id
+    # Node.parent = person id of the parent
+    # Node.action = movie id that connects the two
+
+    # Initialize frontier to just the starting position
+    start = Node(state=source, parent=None, action=None)
+    frontier = StackFrontier()
+    frontier.add(start)
+
+    # Initialize an empty explored set
+    explored = set()
+
+    # Keep looping until solution found
+    while True:
+
+        # If nothing left in frontier, then no path
+        if frontier.empty():
+            raise Exception("no solution")
+
+        # Choose a node from the frontier
+        node = frontier.remove()
+        num_explored += 1
+
+        # If node is the goal, then we have a solution
+        if node.state == target:
+            actors = []
+            movies = []
+            while node.parent is not None:
+                actors.append(node.action)
+                movies.append(node.state)
+                node = node.parent
+            actors.reverse()
+            movies.reverse()
+            pairs = list(zip(actors,movies))
+            return pairs
+
+        # Mark node as explored
+        explored.add(node.state)
+
+        # Add neighbors to frontier
+        for action, state in neighbors_for_person(node.state):
+            if not frontier.contains_state(state) and state not in explored:
+                child = Node(state=state, parent=node, action=action)
+                frontier.add(child)
 
 def person_id_for_name(name):
     """
